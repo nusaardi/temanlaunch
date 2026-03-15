@@ -1,13 +1,16 @@
 {
-  "name": "meta-ads-builder",
+  "name": "temanlaunch",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "lint": "npm run lint:submission",
+    "lint:submission": "eslint src shared server --ext .js,.jsx",
+    "preview": "vite preview",
+    "demo:preflight": "node scripts/demo-preflight.mjs",
+    "submission:check": "npm run build && npm run lint:submission"
   },
   "dependencies": {
     "react": "^19.2.0",

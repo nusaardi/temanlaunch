@@ -1244,7 +1244,9 @@ app.get("/api/health", async (req, res) => {
     let dbOk = false;
     try { await pool.query("SELECT 1"); dbOk = true; } catch (err) { void err; }
     res.json({
+        app: "TemanLaunch API",
         status: "ok",
+        checkedAt: new Date().toISOString(),
         defaultProvider: SERVER_PROVIDER.defaultProvider,
         model: SERVER_PROVIDER.defaultModel,
         region: process.env.AWS_REGION || null,
@@ -1262,7 +1264,7 @@ async function start() {
     await ensureUsageTables(pool);
     await ensureAiCredentialTables(pool);
     app.listen(PORT, () => {
-        console.log(`\n🚀 Meta Ads Builder API`);
+        console.log(`\n🚀 TemanLaunch API`);
         console.log(`   Port:   ${PORT}`);
         console.log(`   Provider:${SERVER_PROVIDER.defaultProvider}`);
         console.log(`   Model:  ${SERVER_PROVIDER.defaultModel}`);

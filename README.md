@@ -2,11 +2,31 @@
 
 TemanLaunch adalah desktop web app untuk mengubah input produk atau brief menjadi bahan launch awal: audience, angle, ad copy, dan landing page draft dalam satu workspace.
 
-Repo ini sedang disiapkan sebagai submission-ready base untuk:
-- GitHub repo: `temanlaunch`
-- Frontend domain: `temanlaunch.my.id`
+Produk ini diposisikan sebagai `desktop launch workspace` untuk founder, operator campaign, dan tim kecil yang ingin bergerak cepat tanpa memecah konteks campaign ke banyak tools.
+
+## Submission Snapshot
+
+- Positioning: desktop-first launch desk
+- Flow utama: `brief / landing page -> audience -> angle -> ad copy -> landing page awal`
+- Safety net: `Demo Workspace` yang bisa dibuka dari login saat auth, DB, atau AI sedang bermasalah
+- Repo utama: `temanlaunch`
+- Frontend domain target: `temanlaunch.my.id`
 - API domain yang direkomendasikan: `api.temanlaunch.my.id`
-- Infrastruktur deploy: Render Blueprint via [render.yaml](/Users/Nusaardi/meta-ads-builder/render.yaml)
+
+## What Judges Should See
+
+- Wizard flow yang cepat dipahami
+- Launch pack yang langsung berisi output awal
+- Editor ringkas yang mempertahankan semua konteks campaign
+- Landing page builder yang sinkron dengan brief
+- Demo mode aman sebagai fallback presentasi
+
+## Core Scripts
+
+- `npm run build`
+- `npm run lint:submission`
+- `npm run submission:check`
+- `npm run demo:preflight -- --web https://temanlaunch.my.id --api https://api.temanlaunch.my.id`
 
 ## Stack
 
@@ -66,6 +86,21 @@ npm run dev
 
 Frontend lokal akan hidup di `http://localhost:5173`.
 
+## Demo Mode
+
+Kalau backend atau auth sedang tidak sehat, buka aplikasi lalu klik `Buka Demo Workspace` dari layar login.
+
+Demo mode akan memuat sample project yang sudah berisi:
+
+- analysis produk
+- audience prioritas
+- sudut pesan awal
+- draft copy
+- landing page awal
+- sample usage summary
+
+Mode ini tidak menyimpan perubahan ke server dan memang dibuat untuk jalur presentasi yang aman.
+
 ## Deploy To Render
 
 1. Push repo ini ke GitHub repo kosong `temanlaunch`.
@@ -78,19 +113,16 @@ Frontend lokal akan hidup di `http://localhost:5173`.
 
 Panduan lebih lengkap ada di [deploy/production.md](/Users/Nusaardi/meta-ads-builder/deploy/production.md).
 
-## Publish To GitHub
+## Production Checks
 
-Kalau folder ini belum menjadi git repo lokal:
+API sudah menyediakan health check di `/api/health`.
+
+Preflight yang direkomendasikan sebelum demo:
 
 ```bash
-git init -b main
-git remote add origin git@github.com:<github-username>/temanlaunch.git
-git add .
-git commit -m "Initial TemanLaunch Render blueprint"
-git push -u origin main
+npm run submission:check
+npm run demo:preflight -- --web https://temanlaunch.my.id --api https://api.temanlaunch.my.id
 ```
-
-Kalau repo lokal sudah ada, cukup arahkan remote `origin` ke repo `temanlaunch` lalu push branch utama.
 
 ## Production Env Notes
 
@@ -108,12 +140,18 @@ Variable AI server-managed yang opsional:
 - `AWS_SECRET_ACCESS_KEY`
 - `AWS_SESSION_TOKEN`
 
+## Submission Docs
+
+- Presentation kit: [docs/competition-kit.md](/Users/Nusaardi/meta-ads-builder/docs/competition-kit.md)
+- Demo checklist: [docs/demo-checklist.md](/Users/Nusaardi/meta-ads-builder/docs/demo-checklist.md)
+
 ## Current Submission Focus
 
 Scope submission saat ini diarahkan ke:
+
 - Wizard flow
 - Editor ringkas / studio
-- Campaign pack hasil AI
+- Launch pack hasil AI
 - Landing page builder
 
 Area operasional lain di luar flow utama sengaja tidak dijadikan fokus deployment submission awal.
