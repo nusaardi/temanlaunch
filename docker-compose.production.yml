@@ -1,0 +1,41 @@
+services:
+  meta-ads-api:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    container_name: meta-ads-api
+    restart: unless-stopped
+    network_mode: bridge
+    environment:
+      PORT: 3001
+      AWS_REGION: ${AWS_REGION}
+      MODEL_ID: ${MODEL_ID}
+      ADMIN_USERNAMES: ${ADMIN_USERNAMES}
+      DATABASE_URL: ${DATABASE_URL}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      ENFORCE_CREDITS: ${ENFORCE_CREDITS:-true}
+      DEFAULT_FREE_CREDITS: ${DEFAULT_FREE_CREDITS:-200}
+      INPUT_TOKEN_COST_USD_PER_1K: ${INPUT_TOKEN_COST_USD_PER_1K:-0}
+      OUTPUT_TOKEN_COST_USD_PER_1K: ${OUTPUT_TOKEN_COST_USD_PER_1K:-0}
+      AWS_SDK_LOAD_CONFIG: "1"
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
+    ports:
+      - "${META_ADS_API_PORT:-3011}:3001"
+    volumes:
+      - /root/.aws:/root/.aws:ro
+
+  meta-ads-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE: ${VITE_API_BASE:-}
+        VITE_API_PORT: ${VITE_API_PORT:-3011}
+    container_name: meta-ads-web
+    restart: unless-stopped
+    depends_on:
+      - meta-ads-api
+    ports:
+      - "${META_ADS_WEB_PORT:-3012}:80"
