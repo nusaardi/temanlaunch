@@ -53,37 +53,41 @@ export default function CampaignPack({
 
   return (
     <div style={{ display: "grid", gap: 14 }}>
-      <div style={{ borderRadius: 28, border: "1px solid #cfbea1", background: "linear-gradient(180deg, #fff9f1 0%, #f3e8d8 100%)", padding: "20px 20px 18px", boxShadow: "0 16px 40px #5d43210d" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "flex-start", flexWrap: "wrap" }}>
+      <div style={{ borderRadius: 30, border: "1px solid #cfbea1", background: "linear-gradient(180deg, #fff9f1 0%, #f3e8d8 100%)", padding: "22px 22px 20px", boxShadow: "0 18px 42px #5d43210d" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1.1fr) minmax(280px,.9fr)", gap: 18, alignItems: "start" }}>
           <div style={{ maxWidth: 720 }}>
             <div style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: 2, fontWeight: 900, color: "#1f6b4a", marginBottom: 8 }}>
-              Campaign Pack
+              Launch Pack
             </div>
-            <div style={{ fontFamily: "'Fraunces', 'Georgia', serif", fontSize: 30, lineHeight: 0.98, letterSpacing: -0.9, color: "#1f2a20", marginBottom: 9 }}>
-              Paket jualan awal yang bisa langsung kamu pakai.
+            <div style={{ fontFamily: "'Fraunces', 'Georgia', serif", fontSize: 32, lineHeight: 0.98, letterSpacing: -1, color: "#1f2a20", marginBottom: 10, maxWidth: "16ch" }}>
+              Paket launch awal yang langsung terasa siap dipakai.
             </div>
             <div style={{ fontSize: 13, color: "#536151", lineHeight: 1.8 }}>
-              Bukan hasil mentah per step. Di sini kamu langsung dapat ringkasan produk, target pembeli utama, ide jualan awal, teks iklan pertama, dan arahan visual yang siap dibawa ke eksekusi.
+              Bukan hasil mentah per langkah. Di sini kamu langsung melihat ringkasan produk, target pembeli utama, sudut pesan pertama, teks iklan awal, dan arahan visual yang siap dibawa ke eksekusi atau presentasi.
+            </div>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 14 }}>
+              <span style={{ background: "#fffdf8", border: "1px solid #cfbea1", borderRadius: 999, padding: "7px 11px", fontSize: 11, fontWeight: 800, color: "#1f6b4a" }}>Siap dipindah ke studio</span>
+              <span style={{ background: "#fffdf8", border: "1px solid #cfbea1", borderRadius: 999, padding: "7px 11px", fontSize: 11, fontWeight: 800, color: "#2d7973" }}>Desktop review friendly</span>
             </div>
           </div>
           <div style={{ display: "grid", gap: 10, minWidth: 250 }}>
-            <div style={{ padding: "12px 14px", borderRadius: 18, border: "1px solid #cfbea1", background: "#fffdf8" }}>
+            <div style={{ padding: "13px 14px", borderRadius: 18, border: "1px solid #cfbea1", background: "#fffdf8" }}>
               <div style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: 1.5, fontWeight: 800, color: "#8d8579", marginBottom: 6 }}>Siap dipakai di</div>
               <div style={{ fontSize: 13, fontWeight: 800, color: "#1f2a20" }}>{project?.name || "Session lokal"}</div>
-              <div style={{ fontSize: 11, color: "#5b6757", lineHeight: 1.65, marginTop: 6 }}>Kalau hasilnya cocok, lanjutkan ke editor untuk mengubah detail atau membuat halaman jualannya.</div>
+              <div style={{ fontSize: 11, color: "#5b6757", lineHeight: 1.65, marginTop: 6 }}>Kalau hasil awalnya sudah terasa benar, lanjutkan ke editor untuk merapikan detail dan memperdalam eksekusi.</div>
             </div>
             <div style={{ fontSize: 11, lineHeight: 1.6, color: "#6b6356" }}>
-              Tiga langkah paling masuk akal setelah hasil jadi:
+              Tiga langkah paling masuk akal setelah launch pack jadi:
             </div>
             <div style={{ display: "grid", gap: 8 }}>
               <button type="button" onClick={copyCaption} disabled={!caption} style={{ display: "flex", justifyContent: "center", alignItems: "center", border: "none", borderRadius: 999, padding: "12px 15px", background: caption ? "#1f6b4a" : "#d7d1c4", color: "#f8f3e8", fontSize: 12, fontWeight: 800, cursor: caption ? "pointer" : "not-allowed" }}>
-                {copied ? "Tersalin" : "Salin teks iklan"}
+                {copied ? "Tersalin" : "Salin draft utama"}
               </button>
               <button type="button" onClick={() => onOpenStudio?.()} style={{ display: "flex", justifyContent: "center", alignItems: "center", border: "none", borderRadius: 999, padding: "12px 15px", background: "#1f6b4a", color: "#f8f3e8", fontSize: 12, fontWeight: 800, cursor: "pointer" }}>
-                Rapikan hasil
+                Buka editor ringkas
               </button>
               <button type="button" onClick={() => onOpenTab?.("landing")} style={{ display: "flex", justifyContent: "center", alignItems: "center", border: "1px solid #cfbea1", borderRadius: 999, padding: "12px 15px", background: "#fffdf7", color: "#1f2a20", fontSize: 12, fontWeight: 800, cursor: "pointer" }}>
-                Buat halaman jualan
+                Tinjau landing page
               </button>
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
@@ -156,9 +160,9 @@ export default function CampaignPack({
           <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", marginBottom: 10, flexWrap: "wrap" }}>
             <div>
               <div style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: 1.6, fontWeight: 900, color: "#6e5568", marginBottom: 6 }}>Teks iklan pertama</div>
-              <div style={{ fontSize: 14, fontWeight: 800, color: "#1f2a20" }}>Draft yang bisa langsung dipakai atau diedit</div>
+              <div style={{ fontSize: 14, fontWeight: 800, color: "#1f2a20" }}>Draft utama yang bisa langsung dipakai atau diedit</div>
             </div>
-            <div style={{ fontSize: 11, color: "#7a6d60" }}>Aksi utama sudah ada di bagian atas pack ini.</div>
+            <div style={{ fontSize: 11, color: "#7a6d60" }}>Aksi utama sengaja ditaruh di atas supaya desk review lebih cepat.</div>
           </div>
           <div style={{ borderRadius: 18, border: "1px solid #ded4c0", background: "#fffdf8", padding: "14px 15px", fontSize: 12, color: "#304132", lineHeight: 1.9, whiteSpace: "pre-wrap", minHeight: 164 }}>
             {caption || "Teks iklan pertama akan muncul di sini setelah wizard selesai."}

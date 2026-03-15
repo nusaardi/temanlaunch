@@ -8,6 +8,7 @@ import { createStudioRuntime } from "./studioRuntime.js";
 import StudioDashboard from "./StudioDashboard.jsx";
 import WizardFlow from "./WizardFlow.jsx";
 import WorkspaceHeader from "./WorkspaceHeader.jsx";
+import { createDemoWorkspace } from "./demoWorkspace.js";
 import { buildConversionGuardrails, buildLanguageGuardrails, buildUsefulnessGuardrails } from "./prompting.js";
 import {
   buildAnalysisFromPage,
@@ -95,6 +96,7 @@ function resolveApiBase() {
 
 const API_BASE = resolveApiBase();
 const DEV_AUTO_LOGIN_ENABLED = import.meta.env.DEV && String(import.meta.env.VITE_DEV_AUTO_LOGIN || "false").toLowerCase() === "true";
+const DEMO_MODE_STORAGE_KEY = "temanlaunch_demo_mode";
 
 function humanizeAppErrorMessage(message) {
   const raw = String(message || "").trim();
@@ -516,7 +518,7 @@ const TC = { "PAS": C.red, "Contrast Frame": C.orange, "Specificity Bomb": C.acc
 const AC = { cold: C.blue, warm: C.orange, hot: C.red };
 const FMT = { Static: "image", Carousel: "layers", Reels: "film", Story: "phone" };
 const FMT_ICON = { Static: Ic.image, Carousel: Ic.layers, Reels: Ic.film, Story: Ic.phone };
-const SHELL_MAX = 1180;
+const SHELL_MAX = 1280;
 
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Instrument+Sans:wght@400;500;600;700;800&display=swap');
@@ -795,42 +797,57 @@ function createWizardProgress(sourceMode = "url") {
 }
 
 export default function App() {
-  const [user, setUser] = useState(() => { try { return JSON.parse(localStorage.getItem("mab_user")); } catch { return null; } });
-  const [token, setToken] = useState(() => localStorage.getItem("mab_token") || "");
-  const [sessionResolved, setSessionResolved] = useState(() => !localStorage.getItem("mab_token"));
+  const [initialDemoWorkspace] = useState(() => {
+    try {
+      return localStorage.getItem(DEMO_MODE_STORAGE_KEY) === "true" ? createDemoWorkspace() : null;
+    } catch {
+      return null;
+    }
+  });
+  const [isDemoMode, setIsDemoMode] = useState(() => Boolean(initialDemoWorkspace));
+  const [user, setUser] = useState(() => {
+    if (initialDemoWorkspace?.user) return initialDemoWorkspace.user;
+    try {
+      return JSON.parse(localStorage.getItem("mab_user"));
+    } catch {
+      return null;
+    }
+  });
+  const [token, setToken] = useState(() => initialDemoWorkspace ? "" : (localStorage.getItem("mab_token") || ""));
+  const [sessionResolved, setSessionResolved] = useState(() => Boolean(initialDemoWorkspace) || !localStorage.getItem("mab_token"));
   const [devLoginBusy, setDevLoginBusy] = useState(false);
   const [devAutoLoginAttempted, setDevAutoLoginAttempted] = useState(false);
-  const [project, setProject] = useState(null);
+  const [project, setProject] = useState(() => initialDemoWorkspace?.project || null);
   const [showProjects, setShowProjects] = useState(false);
   const [autoProjectLoading, setAutoProjectLoading] = useState(false);
-  const [surfaceMode, setSurfaceMode] = useState("wizard");
-  const [advancedMode, setAdvancedMode] = useState(false);
-  const [wizardSourceMode, setWizardSourceMode] = useState("url");
-  const [wizardUrl, setWizardUrl] = useState("");
-  const [wizardBrief, setWizardBrief] = useState(() => createLandingPageBrief());
-  const [wizardProgress, setWizardProgress] = useState(() => createWizardProgress("url"));
+  const [surfaceMode, setSurfaceMode] = useState(() => initialDemoWorkspace?.surfaceMode || "wizard");
+  const [advancedMode, setAdvancedMode] = useState(() => initialDemoWorkspace?.advancedMode || false);
+  const [wizardSourceMode, setWizardSourceMode] = useState(() => initialDemoWorkspace?.wizardSourceMode || "url");
+  const [wizardUrl, setWizardUrl] = useState(() => initialDemoWorkspace?.wizardUrl || "");
+  const [wizardBrief, setWizardBrief] = useState(() => initialDemoWorkspace?.wizardBrief || createLandingPageBrief());
+  const [wizardProgress, setWizardProgress] = useState(() => initialDemoWorkspace?.wizardProgress || createWizardProgress(initialDemoWorkspace?.wizardSourceMode || "url"));
 
-  const [tab, setTab] = useState("analyzer");
-  const [settings, setSettings] = useState(DEFAULT_SETTINGS);
-  const [landingBrief, setLandingBrief] = useState(() => createLandingPageBrief());
-  const [landingPage, setLandingPage] = useState(null);
-  const [analysis, setAnalysis] = useState(null);
-  const [audiences, setAudiences] = useState([]);
-  const [selAud, setSelAud] = useState(null);
-  const [angles, setAngles] = useState([]);
-  const [anglesCache, setAnglesCache] = useState({});
-  const [selAng, setSelAng] = useState(null);
-  const [copy, setCopy] = useState("");
-  const [fmt, setFmt] = useState("Carousel");
-  const [history, setHistory] = useState([]);
+  const [tab, setTab] = useState(() => initialDemoWorkspace?.tab || "analyzer");
+  const [settings, setSettings] = useState(() => initialDemoWorkspace?.settings || DEFAULT_SETTINGS);
+  const [landingBrief, setLandingBrief] = useState(() => initialDemoWorkspace?.landingBrief || createLandingPageBrief());
+  const [landingPage, setLandingPage] = useState(() => initialDemoWorkspace?.landingPage || null);
+  const [analysis, setAnalysis] = useState(() => initialDemoWorkspace?.analysis || null);
+  const [audiences, setAudiences] = useState(() => initialDemoWorkspace?.audiences || []);
+  const [selAud, setSelAud] = useState(() => initialDemoWorkspace?.selAud || null);
+  const [angles, setAngles] = useState(() => initialDemoWorkspace?.angles || []);
+  const [anglesCache, setAnglesCache] = useState(() => initialDemoWorkspace?.anglesCache || {});
+  const [selAng, setSelAng] = useState(() => initialDemoWorkspace?.selAng || null);
+  const [copy, setCopy] = useState(() => initialDemoWorkspace?.copy || "");
+  const [fmt, setFmt] = useState(() => initialDemoWorkspace?.fmt || "Carousel");
+  const [history, setHistory] = useState(() => initialDemoWorkspace?.history || []);
   const [aiProviders, setAiProviders] = useState([]);
   const [serverAiInfo, setServerAiInfo] = useState(null);
   const [aiCredentials, setAiCredentials] = useState([]);
   const [aiSettingsLoading, setAiSettingsLoading] = useState(false);
-  const [usageSummary, setUsageSummary] = useState(null);
-  const [usageEvents, setUsageEvents] = useState([]);
-  const [usageRuns, setUsageRuns] = useState([]);
-  const [usageLedger, setUsageLedger] = useState([]);
+  const [usageSummary, setUsageSummary] = useState(() => initialDemoWorkspace?.usageSummary || null);
+  const [usageEvents, setUsageEvents] = useState(() => initialDemoWorkspace?.usageEvents || []);
+  const [usageRuns, setUsageRuns] = useState(() => initialDemoWorkspace?.usageRuns || []);
+  const [usageLedger, setUsageLedger] = useState(() => initialDemoWorkspace?.usageLedger || []);
   const [adminBillingUsers, setAdminBillingUsers] = useState([]);
   const [usageLoading, setUsageLoading] = useState(false);
   const [adminBillingLoading, setAdminBillingLoading] = useState(false);
@@ -841,7 +858,68 @@ export default function App() {
 
   const authHeaders = { "Content-Type": "application/json", Authorization: `Bearer ${token}` };
 
+  const applyDemoWorkspaceState = (workspace) => {
+    setIsDemoMode(true);
+    setUser(workspace.user);
+    setToken("");
+    setSessionResolved(true);
+    setProject(workspace.project || null);
+    setShowProjects(false);
+    setAutoProjectLoading(false);
+    setSurfaceMode(workspace.surfaceMode || "wizard");
+    setAdvancedMode(Boolean(workspace.advancedMode));
+    setWizardSourceMode(workspace.wizardSourceMode || "brief");
+    setWizardUrl(workspace.wizardUrl || "");
+    setWizardBrief(workspace.wizardBrief || createLandingPageBrief());
+    setWizardProgress(workspace.wizardProgress || createWizardProgress(workspace.wizardSourceMode || "brief"));
+    setTab(workspace.tab || "copy");
+    setSettings(workspace.settings || DEFAULT_SETTINGS);
+    setLandingBrief(workspace.landingBrief || createLandingPageBrief());
+    setLandingPage(workspace.landingPage || null);
+    setAnalysis(workspace.analysis || null);
+    setAudiences(workspace.audiences || []);
+    setSelAud(workspace.selAud || null);
+    setAngles(workspace.angles || []);
+    setAnglesCache(workspace.anglesCache || {});
+    setSelAng(workspace.selAng || null);
+    setCopy(workspace.copy || "");
+    setFmt(workspace.fmt || "Static");
+    setHistory(workspace.history || []);
+    setAiProviders([]);
+    setServerAiInfo(null);
+    setAiCredentials([]);
+    setAiSettingsLoading(false);
+    setUsageSummary(workspace.usageSummary || null);
+    setUsageEvents(workspace.usageEvents || []);
+    setUsageRuns(workspace.usageRuns || []);
+    setUsageLedger(workspace.usageLedger || []);
+    setAdminBillingUsers([]);
+    setUsageLoading(false);
+    setAdminBillingLoading(false);
+    setActiveRunId(null);
+    setLoading(false);
+    setLoadMsg("");
+    setError(null);
+  };
+
+  const seedDemoWorkspace = (overrides = {}) => {
+    const workspace = { ...createDemoWorkspace(), ...overrides };
+    if (overrides.project) workspace.project = overrides.project;
+    if (overrides.settings) workspace.settings = overrides.settings;
+    localStorage.setItem(DEMO_MODE_STORAGE_KEY, "true");
+    localStorage.removeItem("mab_token");
+    localStorage.setItem("mab_user", JSON.stringify(workspace.user));
+    applyDemoWorkspaceState(workspace);
+    return workspace;
+  };
+
+  const activateDemoMode = () => {
+    seedDemoWorkspace();
+  };
+
   const handleAuth = (u, t) => {
+    localStorage.removeItem(DEMO_MODE_STORAGE_KEY);
+    setIsDemoMode(false);
     setUser(u);
     setToken(t);
     setSessionResolved(true);
@@ -1064,13 +1142,24 @@ export default function App() {
   };
 
   const logout = () => {
+    localStorage.removeItem(DEMO_MODE_STORAGE_KEY);
     localStorage.removeItem("mab_token");
     localStorage.removeItem("mab_user");
+    setIsDemoMode(false);
     setUser(null);
     setToken("");
     setSessionResolved(true);
     setProject(null);
+    setShowProjects(false);
     setAutoProjectLoading(false);
+    setSurfaceMode("wizard");
+    setAdvancedMode(false);
+    setWizardSourceMode("url");
+    setWizardUrl("");
+    setWizardBrief(createLandingPageBrief());
+    setWizardProgress(createWizardProgress("url"));
+    setTab("analyzer");
+    setSettings(DEFAULT_SETTINGS);
     setLandingBrief(createLandingPageBrief());
     setLandingPage(null);
     setAnalysis(null);
@@ -1080,6 +1169,7 @@ export default function App() {
     setSelAud(null);
     setSelAng(null);
     setCopy("");
+    setFmt("Carousel");
     setHistory([]);
     setAiProviders([]);
     setServerAiInfo(null);
@@ -1458,6 +1548,167 @@ export default function App() {
           ? "analyzer"
           : "landing";
   const preferredStudioTab = resolveStudioTab(rawPreferredStudioTab, visibleTabs);
+  const demoAction = (message, apply) => run(message, async () => {
+    await new Promise((resolve) => window.setTimeout(resolve, 280));
+    await apply();
+  });
+  const loadDemoPack = ({
+    sourceMode = "brief",
+    nextSurfaceMode = "wizard",
+    nextTab = "copy",
+    nextAdvancedMode = advancedMode,
+    wizardUrlValue = "",
+  } = {}) => {
+    seedDemoWorkspace({
+      surfaceMode: nextSurfaceMode,
+      advancedMode: nextAdvancedMode,
+      tab: nextTab,
+      wizardSourceMode: sourceMode,
+      wizardUrl: wizardUrlValue,
+    });
+  };
+  const demoBuildAudience = () => demoAction("Menata ulang target demo workspace...", async () => {
+    const nextDemo = createDemoWorkspace();
+    setAnalysis(nextDemo.analysis);
+    setAudiences(nextDemo.audiences);
+    setSelAud(nextDemo.selAud);
+    setAngles(nextDemo.angles);
+    setAnglesCache(nextDemo.anglesCache);
+    setSelAng(null);
+    setCopy("");
+    setTab("audience");
+    setWizardProgress(nextDemo.wizardProgress);
+  });
+  const demoSelectAudience = (aud, idx) => demoAction(`Membuka sudut pesan untuk ${aud.nama}...`, async () => {
+    const nextAngles = anglesCache[idx] || [];
+    setSelAud(aud);
+    setAngles(nextAngles);
+    setSelAng(null);
+    setCopy("");
+    setTab("angle");
+  });
+  const demoDeleteAngle = (angToDelete) => {
+    const idx = audiences.findIndex((item) => item.nama === selAud?.nama);
+    if (idx === -1) return;
+    const updatedAngles = angles.filter((item) => item.hook !== angToDelete.hook || item.nama !== angToDelete.nama);
+    setAngles(updatedAngles);
+    setAnglesCache((current) => ({ ...current, [idx]: updatedAngles }));
+    if (selAng?.id === angToDelete.id) {
+      setSelAng(updatedAngles[0] || null);
+      setCopy("");
+    }
+  };
+  const demoGenerateCopy = (ang, notes = "") => demoAction(`Menyiapkan draft demo - ${ang.teknik}...`, async () => {
+    const resultCopy = String(ang?.demoCopy || copy || "").trim();
+    const finalCopy = notes.trim()
+      ? `${resultCopy}\n\nCatatan adaptasi demo:\n- ${notes.trim()}`
+      : resultCopy;
+    const currentAudience = selAud || previewAudience || audiences[0] || null;
+    const nextHistoryItem = {
+      id: `demo-copy-${Date.now()}`,
+      audience: currentAudience?.nama || "Audience demo",
+      angle: ang?.teknik || "Angle demo",
+      fmt,
+      framework: settings.framework,
+      copy: finalCopy,
+      is_used: false,
+      time: new Date().toLocaleString("id-ID"),
+    };
+    setSelAng(ang);
+    setCopy(finalCopy);
+    setTab("copy");
+    setHistory((current) => [nextHistoryItem, ...current].slice(0, 12));
+  });
+  const demoDeleteCopy = (idToDelete) => {
+    setHistory((current) => current.filter((item) => item.id !== idToDelete));
+  };
+  const demoToggleUsed = (idToToggle, currentStatus) => {
+    const nextStatus = !currentStatus;
+    setHistory((current) => current.map((item) => item.id === idToToggle ? { ...item, is_used: nextStatus } : item));
+  };
+  const demoGenerateLanding = () => demoAction("Memuat landing page demo yang sudah dipoles...", async () => {
+    const nextDemo = createDemoWorkspace();
+    setLandingBrief(nextDemo.landingBrief);
+    setLandingPage(nextDemo.landingPage);
+    setAnalysis(nextDemo.analysis);
+    setTab("landing");
+  });
+  const demoUseLandingForCampaign = () => demoAction("Menyelaraskan landing page demo ke launch pack...", async () => {
+    const nextDemo = createDemoWorkspace();
+    setAnalysis(nextDemo.analysis);
+    setAudiences(nextDemo.audiences);
+    setAngles(nextDemo.angles);
+    setAnglesCache(nextDemo.anglesCache);
+    setSelAud(nextDemo.selAud);
+    setSelAng(nextDemo.selAng);
+    setCopy(nextDemo.copy);
+    setHistory(nextDemo.history);
+    setTab("copy");
+  });
+  const demoRefreshUsage = () => demoAction("Menyegarkan ringkasan demo billing...", async () => {
+    const nextDemo = createDemoWorkspace();
+    setUsageSummary(nextDemo.usageSummary);
+    setUsageEvents(nextDemo.usageEvents);
+    setUsageRuns(nextDemo.usageRuns);
+    setUsageLedger(nextDemo.usageLedger);
+  });
+  const handleDemoProjects = () => {
+    setError("Demo workspace memakai sample project tetap. Untuk pilih project real, masuk dengan akun yang terhubung backend.");
+  };
+  const handleDemoSave = () => {
+    setError("Mode demo tidak menyimpan perubahan ke server. Masuk dengan akun real saat sudah siap menjalankan flow live.");
+  };
+  const appActions = isDemoMode
+    ? {
+        onRunFromUrl: (rawUrl) => demoAction("Menyiapkan launch pack demo dari jalur URL...", async () => {
+          loadDemoPack({ sourceMode: "url", nextSurfaceMode: "wizard", nextTab: "copy", wizardUrlValue: rawUrl });
+        }),
+        onRunFromBrief: () => demoAction("Menyiapkan launch pack demo dari brief preset...", async () => {
+          loadDemoPack({ sourceMode: "brief", nextSurfaceMode: "wizard", nextTab: "copy" });
+        }),
+        onAnalyzeUrl: () => demoAction("Membuka ringkasan produk demo...", async () => {
+          loadDemoPack({ sourceMode: "url", nextSurfaceMode: "studio", nextTab: "analyzer" });
+        }),
+        onAnalyzeText: () => demoAction("Membuka ringkasan produk demo...", async () => {
+          loadDemoPack({ sourceMode: "brief", nextSurfaceMode: "studio", nextTab: "analyzer" });
+        }),
+        onBuildAudience: demoBuildAudience,
+        onSelectAudience: demoSelectAudience,
+        onGenerateCopy: demoGenerateCopy,
+        onDeleteAngle: demoDeleteAngle,
+        onDeleteCopy: demoDeleteCopy,
+        onToggleUsed: demoToggleUsed,
+        onGenerateLanding: demoGenerateLanding,
+        onSaveLanding: handleDemoSave,
+        onUseLanding: demoUseLandingForCampaign,
+        onOpenProjects: handleDemoProjects,
+        onSaveProject: handleDemoSave,
+        onRefreshUsage: demoRefreshUsage,
+        onAdminSearch: async () => [],
+        onAdminGrant: async () => {
+          throw new Error("Mode demo tidak mendukung top-up kredit.");
+        },
+      }
+    : {
+        onRunFromUrl: runWizardFromUrl,
+        onRunFromBrief: runWizardFromBrief,
+        onAnalyzeUrl: doUrl,
+        onAnalyzeText: doText,
+        onBuildAudience: doBuildAud,
+        onSelectAudience: doSelAud,
+        onGenerateCopy: doGenCopy,
+        onDeleteAngle,
+        onDeleteCopy,
+        onToggleUsed,
+        onGenerateLanding: doGenerateLandingPage,
+        onSaveLanding: onSaveLandingPage,
+        onUseLanding: onUseLandingPageForCampaign,
+        onOpenProjects: () => setShowProjects(true),
+        onSaveProject: saveProject,
+        onRefreshUsage: () => refreshUsageData(project?.id || null),
+        onAdminSearch: (search) => refreshAdminUsers(search),
+        onAdminGrant: grantCreditsToUser,
+      };
   const openStudio = (nextTab = tab) => {
     setSurfaceMode("studio");
     if (nextTab) setTab(resolveStudioTab(nextTab, visibleTabs));
@@ -1495,6 +1746,12 @@ export default function App() {
   const quickStartWizardStarterKit = (starterId) => {
     const starter = STARTER_BRIEF_KITS.find((item) => item.id === starterId);
     if (!starter) return;
+    if (isDemoMode) {
+      demoAction("Membuka launch pack demo dari starter kit...", async () => {
+        loadDemoPack({ sourceMode: "brief", nextSurfaceMode: "wizard", nextTab: "copy" });
+      });
+      return;
+    }
     const preset = getGoalPreset(starter.goalPreset);
     const runtimeSettings = {
       ...settings,
@@ -1583,6 +1840,7 @@ export default function App() {
       <div className="shell-ambient"><i className="orb-a" /><i className="orb-b" /><i className="orb-c" /></div>
       <LoginModal
         onAuth={handleAuth}
+        onEnterDemo={activateDemoMode}
         onDevLogin={doDevLogin}
         devLoginEnabled={DEV_AUTO_LOGIN_ENABLED}
         devLoginBusy={devLoginBusy}
@@ -1595,7 +1853,7 @@ export default function App() {
     <div style={{ background: C.bg, minHeight: "100vh", color: C.text, fontFamily: FONT_BODY, position: "relative", overflowX: "hidden" }}>
       <style>{css}</style>
       <div className="shell-ambient"><i className="orb-a" /><i className="orb-b" /><i className="orb-c" /></div>
-      {showProjects && <ProjectModal token={token} onSelect={loadProject} onClose={() => setShowProjects(false)} currentId={project?.id} starterProjects={STARTER_BRIEF_KITS} ui={dialogUi} />}
+      {showProjects && token && <ProjectModal token={token} onSelect={loadProject} onClose={() => setShowProjects(false)} currentId={project?.id} starterProjects={STARTER_BRIEF_KITS} ui={dialogUi} />}
 
       <WorkspaceHeader
         C={C}
@@ -1617,8 +1875,9 @@ export default function App() {
         history={history}
         usageSummary={usageSummary}
         user={user}
-        onOpenProjects={() => setShowProjects(true)}
-        onSaveProject={saveProject}
+        isDemoMode={isDemoMode}
+        onOpenProjects={appActions.onOpenProjects}
+        onSaveProject={appActions.onSaveProject}
         onLogout={logout}
       />
 
@@ -1637,10 +1896,10 @@ export default function App() {
               onGoalPresetChange={applyGoalPreset}
               urlValue={wizardUrl}
               onUrlChange={setWizardUrl}
-              onRunFromUrl={runWizardFromUrl}
+              onRunFromUrl={appActions.onRunFromUrl}
               briefValue={wizardBrief}
               onBriefChange={(key, value) => setWizardBrief((current) => ({ ...current, [key]: value }))}
-              onRunFromBrief={runWizardFromBrief}
+              onRunFromBrief={appActions.onRunFromBrief}
               onApplyStarterKit={applyWizardStarterKit}
               onQuickStartStarterKit={quickStartWizardStarterKit}
               wizardProgress={wizardProgress}
@@ -1650,6 +1909,7 @@ export default function App() {
               audiences={audiences}
               angles={previewAngles}
               copy={copy}
+              isDemoMode={isDemoMode}
               onOpenStudio={() => openStudio(preferredStudioTab)}
               onOpenAdvancedStudio={() => openAdvancedStudio(rawPreferredStudioTab)}
               onOpenTab={openStudio}
@@ -1689,7 +1949,7 @@ export default function App() {
             loading={loading}
             loadMsg={loadMsg}
             autoProjectLoading={autoProjectLoading}
-            onOpenProjects={() => setShowProjects(true)}
+            onOpenProjects={appActions.onOpenProjects}
             error={error}
             onClearError={() => setError(null)}
           >
@@ -1719,10 +1979,10 @@ export default function App() {
               loading={loading}
               onChangeBrief={setLandingBrief}
               onChangePage={setLandingPage}
-              onGenerate={doGenerateLandingPage}
+              onGenerate={appActions.onGenerateLanding}
               onApplyTemplate={onApplyLandingTemplate}
-              onSave={onSaveLandingPage}
-              onUseForCampaign={onUseLandingPageForCampaign}
+              onSave={appActions.onSaveLanding}
+              onUseForCampaign={appActions.onUseLanding}
               onExport={onExportLandingPage}
               C={C}
               Ic={Ic}
@@ -1733,10 +1993,10 @@ export default function App() {
               Zero={Zero}
             />
           )}
-          {tab === "analyzer" && <TabAnalyzer analysis={analysis} setAnalysis={setAnalysis} onUrl={doUrl} onText={doText} onBuild={doBuildAud} loading={loading} ui={corePanelUi} />}
-          {tab === "audience" && <TabAudience analysis={analysis} audiences={audiences} onBuild={doBuildAud} onSelect={doSelAud} loading={loading} ui={corePanelUi} />}
-          {tab === "angle" && <TabAngle audience={previewAudience} audienceIdx={previewAudienceIdx} angles={previewAngles} onRebuild={doSelAud} onGenCopy={doGenCopy} onDeleteAngle={onDeleteAngle} fmt={fmt} setFmt={setFmt} loading={loading} advancedMode={advancedMode} ui={corePanelUi} />}
-          {tab === "copy" && <TabCopy analysis={analysis} audience={previewAudience} angle={previewAngle} copy={copy} history={history} onRegen={n => previewAngle && doGenCopy(previewAngle, n)} onGoTo={setTab} loading={loading} fmt={fmt} setFmt={setFmt} settings={settings} advancedMode={advancedMode} onDeleteCopy={onDeleteCopy} onToggleUsed={onToggleUsed} ui={copyUsageUi} />}
+          {tab === "analyzer" && <TabAnalyzer analysis={analysis} setAnalysis={setAnalysis} onUrl={appActions.onAnalyzeUrl} onText={appActions.onAnalyzeText} onBuild={appActions.onBuildAudience} loading={loading} ui={corePanelUi} />}
+          {tab === "audience" && <TabAudience analysis={analysis} audiences={audiences} onBuild={appActions.onBuildAudience} onSelect={appActions.onSelectAudience} loading={loading} ui={corePanelUi} />}
+          {tab === "angle" && <TabAngle audience={previewAudience} audienceIdx={previewAudienceIdx} angles={previewAngles} onRebuild={appActions.onSelectAudience} onGenCopy={appActions.onGenerateCopy} onDeleteAngle={appActions.onDeleteAngle} fmt={fmt} setFmt={setFmt} loading={loading} advancedMode={advancedMode} ui={corePanelUi} />}
+          {tab === "copy" && <TabCopy analysis={analysis} audience={previewAudience} angle={previewAngle} copy={copy} history={history} onRegen={n => previewAngle && appActions.onGenerateCopy(previewAngle, n)} onGoTo={setTab} loading={loading} fmt={fmt} setFmt={setFmt} settings={settings} advancedMode={advancedMode} onDeleteCopy={appActions.onDeleteCopy} onToggleUsed={appActions.onToggleUsed} ui={copyUsageUi} />}
           {tab === "usage" && (
             <TabUsage
               summary={usageSummary}
@@ -1746,9 +2006,9 @@ export default function App() {
               billingUsers={adminBillingUsers}
               user={user}
               project={project}
-              onRefresh={() => refreshUsageData(project?.id || null)}
-              onAdminSearch={(search) => refreshAdminUsers(search)}
-              onAdminGrant={grantCreditsToUser}
+              onRefresh={appActions.onRefreshUsage}
+              onAdminSearch={appActions.onAdminSearch}
+              onAdminGrant={appActions.onAdminGrant}
               adminLoading={adminBillingLoading}
               loading={usageLoading}
               ui={copyUsageUi}

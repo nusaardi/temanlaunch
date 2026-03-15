@@ -1,0 +1,505 @@
+import { createLandingPageBrief, normalizeLandingPageRecord } from "../shared/landingPage.js";
+import { createDefaultAiSettings } from "../shared/aiProviders.js";
+
+function buildLandingPage() {
+  const brief = createLandingPageBrief({
+    productName: "TemanLaunch Sprint",
+    targetMarket: "Owner UMKM, coach, dan tim kecil yang butuh campaign launch cepat tapi belum punya audience, angle, copy, dan halaman jualan yang rapi.",
+    offer: "Sprint 5 hari untuk menyusun audience prioritas, sudut pesan, ad copy awal, dan landing page pertama dalam satu meja kerja desktop.",
+    price: "Mulai Rp3.500.000 per sprint",
+    ctaWhatsapp: "https://wa.me/6281234567890",
+    ctaCheckout: "https://cal.com/temanlaunch/sprint",
+    usp: "Bukan cuma bikin aset. TemanLaunch bantu mengubah brief berantakan jadi launch pack yang siap dibawa ke iklan dan sales page.",
+    benefitMain: "Tim kecil bisa launch lebih cepat, lebih rapi, dan nggak lagi mulai campaign dari dokumen kosong.",
+    socialProof: "Sudah dipakai tim kecil untuk menyiapkan launch kelas, jasa, dan produk digital tanpa harus pindah-pindah tools.",
+    guarantee: "Kalau scope sprint ternyata belum siap dijalankan, kamu tetap pulang dengan roadmap prioritas dan draft aset yang bisa diteruskan internal.",
+    faq: "Apakah cocok untuk jasa?\nApakah TemanLaunch juga bantu landing page?\nBerapa cepat hasil awal bisa dipakai?",
+    tone: "tajam, desktop-first, terasa seperti tool kerja founder dan marketer yang butuh cepat tapi tetap rapi",
+  });
+
+  const page = normalizeLandingPageRecord({
+    pageType: "landing",
+    framework: "PAS",
+    templateKey: "sales-v1",
+    stylePreset: "signal",
+    seo: {
+      title: "TemanLaunch Sprint | Launch Pack Desktop-First untuk Campaign Kecil yang Harus Cepat Jadi",
+      description: "Satu workflow desktop untuk menyusun audience, angle, ad copy, dan landing page awal tanpa pindah tools.",
+    },
+    sections: [
+      {
+        type: "hero",
+        badge: "Desktop launch workspace untuk tim kecil",
+        headline: "Berhenti mulai campaign dari file kosong tiap kali mau launch.",
+        subheadline: "TemanLaunch Sprint merapikan brief, audience, angle, copy, dan landing page awal jadi satu launch pack yang bisa langsung dipakai tim kamu.",
+        primaryCtaText: "Diskusikan Sprint via WhatsApp",
+        primaryCtaHref: brief.ctaWhatsapp,
+        secondaryCtaText: "Lihat jadwal launch",
+        secondaryCtaHref: brief.ctaCheckout,
+        highlightBullets: [
+          "Satu flow untuk audience, sudut pesan, ad copy, dan sales page awal.",
+          "Cocok untuk desktop workflow yang dipakai founder, marketer, atau operator campaign.",
+          "Tim kecil jadi punya bahan launch yang rapi sebelum iklan mulai jalan.",
+        ],
+      },
+      {
+        type: "problem",
+        title: "Masalah launch kecil biasanya bukan kurang ide, tapi konteksnya berantakan.",
+        intro: "Campaign sering melambat bukan karena tim nggak bisa nulis, tapi karena audience, angle, dan halaman jualannya lahir di tempat yang terpisah-pisah.",
+        painPoints: [
+          "Setiap launch dimulai lagi dari brief acak, chat, dan catatan yang tercecer.",
+          "Audience dan sudut pesan berubah-ubah karena tidak ada satu workspace utama.",
+          "Draft copy jadi susah dievaluasi karena landing page, CTA, dan positioning belum sinkron.",
+        ],
+      },
+      {
+        type: "benefits",
+        title: "Yang kamu dapat setelah sprint dimulai",
+        items: [
+          {
+            title: "Audience prioritas lebih cepat ketemu",
+            description: "TemanLaunch menyusun segment awal lengkap dengan pain utama, hasil yang dicari, dan arah targeting sehingga tim tidak menebak-nebak dari nol.",
+          },
+          {
+            title: "Sudut pesan langsung punya konteks",
+            description: "Setiap angle diturunkan dari target pembeli aktif sehingga copy yang ditulis terasa lebih nyambung ke problem yang mau dipecahkan.",
+          },
+          {
+            title: "Landing page awal ikut sinkron",
+            description: "Offer, CTA, bukti sosial, dan narasi halaman jualan tidak lagi tertinggal di belakang proses penulisan iklan.",
+          },
+        ],
+      },
+      {
+        type: "proof",
+        title: "Kenapa flow ini terasa lebih enak dipakai tim kecil",
+        intro: "Bahkan sebelum dioptimasi lebih jauh, tim sudah bisa melihat satu benang merah campaign dari brief sampai hasil awal.",
+        testimonials: [
+          {
+            name: "Rani",
+            role: "Owner kelas online",
+            quote: "Biasanya launch kami macet di awal. Dengan launch pack ini, tim langsung tahu audience mana yang dikejar dan angle mana yang dibawa ke ads.",
+          },
+          {
+            name: "Gilang",
+            role: "Operator agency kecil",
+            quote: "Enaknya semua bahan ada di satu workspace. Jadi revisi tidak lompat-lompat antara copy, landing page, dan brief lama.",
+          },
+          {
+            name: "Mita",
+            role: "Founder jasa konsultasi",
+            quote: "Landing page awalnya bukan final, tapi cukup rapi untuk dipresentasikan dan dipakai closing lebih cepat.",
+          },
+        ],
+      },
+      {
+        type: "offer",
+        title: "Isi launch sprint yang paling sering dipakai",
+        priceLabel: "Mulai investasi",
+        priceValue: brief.price,
+        guarantee: brief.guarantee,
+        bonuses: [
+          "1 launch workspace desktop yang sudah terisi audience, angle, dan copy awal",
+          "Template landing page yang selaras dengan offer utama",
+          "Roadmap prioritas kalau campaign belum siap dinaikkan sekarang",
+        ],
+        ctaText: "Booking Sprint Sekarang",
+        ctaHref: brief.ctaCheckout,
+      },
+      {
+        type: "faq",
+        title: "Pertanyaan yang paling sering muncul",
+        items: [
+          {
+            question: "Apakah cocok untuk jasa, bukan produk fisik?",
+            answer: "Cocok. Flow ini justru dirancang supaya jasa, kelas, atau offer digital bisa cepat punya positioning dan sudut pesan yang lebih rapi.",
+          },
+          {
+            question: "Apakah hasilnya sudah final untuk launch besar?",
+            answer: "Hasil awalnya dibuat agar cepat dipakai. Tim kamu masih bisa menyunting ulang, tapi titik berangkatnya jauh lebih jelas daripada mulai dari nol.",
+          },
+          {
+            question: "Apakah landing page ikut dibuat?",
+            answer: "Ya. TemanLaunch menyiapkan halaman awal yang sinkron dengan offer dan CTA supaya tim tidak memisahkan proses ads dan sales page.",
+          },
+        ],
+      },
+      {
+        type: "cta",
+        title: "Kalau launch berikutnya harus lebih rapi, mulai dari workspace yang sama.",
+        text: "TemanLaunch Sprint membantu tim kecil mengunci audience, angle, copy, dan halaman jualan awal sebelum terlalu banyak energi habis di revisi acak.",
+        ctaText: "Masuk ke WhatsApp",
+        ctaHref: brief.ctaWhatsapp,
+      },
+      {
+        type: "footer",
+        smallText: "TemanLaunch Sprint dibuat untuk desktop workflow yang cepat, rapi, dan enak dipresentasikan.",
+        contactLine: "Butuh scope khusus? Tim TemanLaunch bisa menyesuaikan sprint dengan jenis offer dan ritme launch kamu.",
+      },
+    ],
+  }, brief);
+
+  return {
+    brief,
+    page,
+  };
+}
+
+function buildAudiences() {
+  return [
+    {
+      id: "demo-aud-1",
+      nama: "Founder yang mau launch cepat",
+      usia: "27-38 tahun",
+      deskripsi: "Founder atau marketer kecil yang paham produknya, tapi setiap kali mau launch tetap terseret ke brief yang acak dan revisi yang melebar.",
+      pain_utama: "Campaign sering telat jalan karena audience, angle, copy, dan landing page tidak lahir dari satu konteks yang sama.",
+      dream_outcome: "Punya workspace desktop yang langsung menyatukan bahan launch awal supaya tim bisa fokus eksekusi.",
+      awareness: "Problem Aware",
+      meta_targeting: "Founder UMKM, digital product owner, marketing lead, performance marketing, sales funnel",
+      hormozi_hook: "Bukan kurang ide. Mereka kurang satu meja kerja yang bikin semua bahan launch lahir dari konteks yang sama.",
+    },
+    {
+      id: "demo-aud-2",
+      nama: "Operator campaign serba mepet",
+      usia: "24-33 tahun",
+      deskripsi: "Operator atau tim ads yang sering menerima brief setengah matang lalu diminta menulis copy dan menyiapkan landing page dalam waktu singkat.",
+      pain_utama: "Terlalu banyak waktu habis untuk merapikan konteks sebelum benar-benar mulai membuat iklan.",
+      dream_outcome: "Dapat launch pack awal yang bisa langsung dibawa ke ads, review internal, dan diskusi dengan founder.",
+      awareness: "Solution Aware",
+      meta_targeting: "Ads specialist, copywriter, funnel builder, social media buyer, freelance marketer",
+      hormozi_hook: "Yang mereka butuhkan bukan tool tambahan, tapi workflow yang memang dibuat untuk meringkas kerja launch.",
+    },
+    {
+      id: "demo-aud-3",
+      nama: "Coach atau creator yang butuh halaman cepat",
+      usia: "29-42 tahun",
+      deskripsi: "Coach, konsultan, atau creator yang ingin cepat menjual offer, tetapi sering tertahan karena sales page dan narasi iklan tidak pernah jadi serempak.",
+      pain_utama: "Launch kehilangan momentum karena halaman jualan dan copy iklan tidak siap di waktu yang sama.",
+      dream_outcome: "Bisa mempresentasikan satu paket launch yang terasa siap walau timnya kecil.",
+      awareness: "Product Aware",
+      meta_targeting: "Coach bisnis, creator education, online course creator, consultant, webinar host",
+      hormozi_hook: "Kalau landing page dan copy lahir bareng, kecepatan launch naik drastis tanpa harus menambah tim.",
+    },
+  ];
+}
+
+function buildAnglesByAudience() {
+  return {
+    "demo-aud-1": [
+      {
+        id: "demo-ang-1",
+        nama: "Context collapse",
+        teknik: "Context Collapse",
+        framework_note: "PAS",
+        hook: "Setiap launch terasa berat karena timmu mulai dari chat, catatan, dan brief yang tidak pernah bertemu.",
+        big_promise: "Satukan audience, angle, copy, dan landing page awal sebelum revisi mulai membengkak.",
+        tone: "tajam, desktop-first, rapi",
+        rekomendasi_format: "Static",
+        why_it_works: "Founder langsung merasa masalah sehari-harinya dibaca dengan spesifik.",
+        demoCopy: `Setiap mau launch, tim kecil biasanya nggak kekurangan ide.\n\nYang bikin lama justru satu hal: semua bahan tersebar.\nAudience ada di catatan. Angle ada di chat. Copy ada di draft lama. Landing page masih menyusul.\n\nTemanLaunch Sprint bikin semuanya ketemu di satu workspace desktop.\n\nDalam satu flow, kamu bisa lihat siapa target utamanya, sudut pesan mana yang paling kuat, draft copy pertama, sampai halaman jualan awal yang sudah sinkron dengan offer.\n\nJadi waktu timmu nggak habis untuk menebak-nebak konteks lagi.\n\nKalau launch berikutnya harus lebih rapi dan lebih cepat jalan, mulai dari TemanLaunch Sprint.\n\n===IMAGE PROMPT===\nDesktop workspace hangat bernuansa editorial, founder kecil menatap launch dashboard dengan panel audience, angle, copy, dan landing page terbuka sekaligus, lighting natural, premium but grounded, no purple, no futuristic sci-fi.`,
+      },
+      {
+        id: "demo-ang-2",
+        nama: "Revisi mahal",
+        teknik: "Revisi Mahal",
+        framework_note: "PAS",
+        hook: "Banyak launch gagal rapi bukan karena iklannya jelek, tapi karena revisinya mulai terlalu dini saat konteks belum utuh.",
+        big_promise: "Bangun launch pack dulu sebelum tim masuk ke revisi detail.",
+        tone: "tegas, founder-minded",
+        rekomendasi_format: "Carousel",
+        why_it_works: "Membingkai TemanLaunch sebagai alat pencegah chaos, bukan sekadar generator copy.",
+        demoCopy: `Revisi cepat memang terasa produktif.\n\nMasalahnya, kalau konteks campaign belum utuh, revisi hanya mempercepat kekacauan.\n\nTemanLaunch Sprint membantu tim kecil berhenti mengedit hal yang salah terlalu cepat.\n\nKamu mulai dari ringkasan offer, lanjut ke target pembeli, turunkan angle, tulis draft copy pertama, lalu sinkronkan ke landing page awal.\n\nBegitu launch pack dasarnya sudah jadi, barulah revisi jadi terasa masuk akal.\n\nItu sebabnya workspace ini enak dipakai founder yang butuh tim kecil tetap bergerak cepat tanpa kehilangan arah.\n\n===IMAGE PROMPT===\nSplit-scene campaign desk, left side messy sticky notes and chat screenshots, right side clean desktop launch workspace with organized cards, warm green and sand tones, editorial product shot, human-centered realism.`,
+      },
+      {
+        id: "demo-ang-3",
+        nama: "One desk launch",
+        teknik: "One Desk Launch",
+        framework_note: "PAS",
+        hook: "Kalau semua bahan launch lahir di meja kerja yang sama, keputusan jadi lebih cepat dan tim lebih tenang.",
+        big_promise: "Bawa semua bahan launch awal ke satu desktop workflow yang gampang dipresentasikan.",
+        tone: "meyakinkan, produktif",
+        rekomendasi_format: "Static",
+        why_it_works: "Menjual rasa kontrol dan kejelasan, bukan sekadar output AI.",
+        demoCopy: `Tim kecil nggak butuh makin banyak tool.\n\nTim kecil butuh satu meja kerja yang bikin audience, angle, copy, dan landing page awal lahir dari konteks yang sama.\n\nItu yang dikerjakan TemanLaunch Sprint.\n\nBegitu kamu masuk, workspace ini langsung membentuk launch pack awal yang enak dicek, enak dipresentasikan, dan enak diteruskan ke eksekusi.\n\nBuat founder, ini berarti keputusan lebih cepat.\nBuat operator, ini berarti brief lebih jelas.\nBuat launch berikutnya, ini berarti lebih sedikit chaos.\n\n===IMAGE PROMPT===\nPremium desktop interface on laptop, visible launch workflow cards, calm productivity vibe, founder and operator discussing screen, warm cream background with green accents, realistic editorial composition.`,
+      },
+    ],
+    "demo-aud-2": [
+      {
+        id: "demo-ang-4",
+        nama: "No more blank briefs",
+        teknik: "No More Blank Briefs",
+        framework_note: "PAS",
+        hook: "Kalau kamu operator campaign, brief setengah matang adalah bentuk lembur yang paling sering disamarkan.",
+        big_promise: "Ubah brief separuh jadi bahan launch yang langsung bisa dikerjakan.",
+        tone: "tajam, operator-centric",
+        rekomendasi_format: "Carousel",
+        why_it_works: "Relatable untuk operator yang selalu menerima bahan kurang siap.",
+        demoCopy: `Banyak operator campaign kelihatan lambat, padahal yang datang ke mereka memang belum siap.\n\nBrief setengah matang. Offer belum jernih. CTA belum pasti. Landing page masih nanti.\n\nTemanLaunch Sprint membantu mengubah bahan mentah seperti itu jadi launch pack awal yang lebih utuh.\n\nAudience prioritas sudah ada.\nSudut pesan awal sudah ada.\nDraft copy pertama sudah ada.\nLanding page awal juga ikut kebangun.\n\nJadi kamu nggak harus mulai dari halaman kosong lagi tiap dapat deadline mepet.\n\n===IMAGE PROMPT===\nOperator marketer at desktop, deadline energy but calm organized dashboard on screen, campaign cards and copy panels visible, warm office lighting, practical modern Indonesian startup aesthetic.`,
+      },
+      {
+        id: "demo-ang-5",
+        nama: "Pitch-ready assets",
+        teknik: "Pitch-Ready Assets",
+        framework_note: "PAS",
+        hook: "Yang sering dibutuhkan tim kecil bukan final asset, tapi bahan launch yang cukup rapi untuk di-review dan dilanjutkan cepat.",
+        big_promise: "Dapat paket awal yang enak dibawa ke founder dan tim desain.",
+        tone: "profesional, singkat",
+        rekomendasi_format: "Static",
+        why_it_works: "Menjual kesiapan review, bukan janji final sempurna.",
+        demoCopy: `Tidak semua launch butuh aset final di hari pertama.\n\nSeringnya, tim cuma butuh satu paket bahan yang cukup rapi untuk dipresentasikan, direview, lalu dipercepat.\n\nTemanLaunch Sprint dibuat untuk momen itu.\n\nIa membantu operator mengubah brief yang kabur menjadi audience, angle, copy, dan landing page awal yang sudah cukup matang untuk dibawa ke langkah berikutnya.\n\nJadi meeting review terasa lebih jelas, bukan lebih ramai.\n\n===IMAGE PROMPT===\nDesktop screen in review meeting, launch pack cards neatly arranged, teammates pointing at organized campaign dashboard, muted premium palette with warm sand and green accents.`,
+      },
+      {
+        id: "demo-ang-6",
+        nama: "Launch desk",
+        teknik: "Launch Desk",
+        framework_note: "PAS",
+        hook: "Saat semua bahan launch ada di satu desktop workspace, operator bisa berhenti jadi penerjemah chaos.",
+        big_promise: "Kerja launch terasa seperti workflow, bukan kebakaran kecil yang berulang.",
+        tone: "tegas, rapi",
+        rekomendasi_format: "Static",
+        why_it_works: "Memperjelas positioning tool sebagai command center tim kecil.",
+        demoCopy: `Banyak operator campaign sebenarnya bukan kekurangan skill.\n\nMereka terlalu sering dipaksa menerjemahkan chaos.\n\nTemanLaunch Sprint memberi satu desktop launch desk untuk merangkum konteks campaign sebelum eksekusi dimulai.\n\nJadi operator bisa fokus pada keputusan yang penting, bukan menambal brief yang bolong satu-satu.\n\n===IMAGE PROMPT===\nCommand-center style desktop UI for campaign launch, refined and organized, multiple clear columns for audience, message angles, and landing page, warm cinematic office scene.`,
+      },
+    ],
+    "demo-aud-3": [
+      {
+        id: "demo-ang-7",
+        nama: "Momentum launch",
+        teknik: "Momentum Launch",
+        framework_note: "PAS",
+        hook: "Creator sering kehilangan momentum bukan karena offer-nya lemah, tapi karena halaman jualan dan copy tidak pernah siap bersamaan.",
+        big_promise: "Satukan narasi ads dan halaman jualan sebelum momentum hilang.",
+        tone: "hangat, meyakinkan",
+        rekomendasi_format: "Carousel",
+        why_it_works: "Sangat relevan untuk creator dan coach yang launch by momentum.",
+        demoCopy: `Kalau kamu menjual kelas, konsultasi, atau workshop, momentum itu mahal.\n\nSayangnya, banyak launch melambat karena copy iklan dan landing page selesai di waktu yang berbeda.\n\nTemanLaunch Sprint membantu keduanya lahir dari konteks yang sama.\n\nAudience utamanya jelas.\nAngle-nya jelas.\nCopy awalnya jelas.\nHalaman jualannya juga ikut sinkron.\n\nJadi saat waktunya membuka launch, timmu tidak lagi mengejar ekor sendiri.\n\n===IMAGE PROMPT===\nCoach or creator preparing launch on a laptop, dashboard showing synchronized ad copy and landing page, warm premium editorial style, realistic Indonesian workspace, cream and forest green tones.`,
+      },
+      {
+        id: "demo-ang-8",
+        nama: "Sell with one story",
+        teknik: "Sell With One Story",
+        framework_note: "PAS",
+        hook: "Offer creator terasa lebih kuat saat iklan dan sales page bercerita dengan bahasa yang sama.",
+        big_promise: "Bangun satu cerita launch yang terasa konsisten dari klik pertama sampai CTA.",
+        tone: "refined, premium",
+        rekomendasi_format: "Static",
+        why_it_works: "Mendorong konsistensi narasi, hal yang sering terasa premium di mata juri.",
+        demoCopy: `Offer yang bagus bisa tetap terlihat biasa kalau ceritanya pecah.\n\nIklan bicara satu hal, sales page bicara hal lain, CTA terasa datang belakangan.\n\nTemanLaunch Sprint membantu creator dan coach menyatukan cerita launch itu lebih awal.\n\nHasilnya bukan cuma lebih rapi di mata tim, tapi juga lebih enak diterima calon pembeli yang baru kenal.\n\n===IMAGE PROMPT===\nElegant laptop interface with one cohesive launch story across ad copy and landing page, premium editorial design, soft warm shadows, sophisticated but grounded business aesthetic.`,
+      },
+      {
+        id: "demo-ang-9",
+        nama: "Small team confidence",
+        teknik: "Small Team Confidence",
+        framework_note: "PAS",
+        hook: "Tim kecil butuh rasa percaya diri untuk launch, dan itu lahir dari konteks yang jelas, bukan dari banyak meeting.",
+        big_promise: "Beri tim kecil pegangan yang cukup jelas untuk bergerak cepat.",
+        tone: "supportive, clear",
+        rekomendasi_format: "Static",
+        why_it_works: "Menjual emosi kelegaan dan confidence, bukan hanya fitur.",
+        demoCopy: `Tim kecil jarang kekurangan niat.\n\nYang sering kurang adalah pegangan yang cukup jelas untuk bergerak cepat.\n\nTemanLaunch Sprint membantu memberi pegangan itu lewat workspace desktop yang menyatukan brief, audience, angle, copy, dan halaman jualan awal.\n\nSaat konteksnya lebih utuh, launch terasa lebih tenang.\nDan saat tim lebih tenang, keputusan bisa diambil lebih cepat.\n\n===IMAGE PROMPT===\nSmall creative team feeling confident around a desktop launch dashboard, warm collaborative atmosphere, premium yet practical Indonesian office, focus on clarity and calm execution.`,
+      },
+    ],
+  };
+}
+
+export function createDemoWorkspace() {
+  const { brief, page } = buildLandingPage();
+  const audiences = buildAudiences();
+  const angleMap = buildAnglesByAudience();
+  const primaryAudience = audiences[0];
+  const primaryAngles = angleMap[primaryAudience.id];
+  const primaryAngle = primaryAngles[0];
+  const copy = primaryAngle.demoCopy;
+  const history = [
+    {
+      id: "demo-copy-1",
+      audience: primaryAudience.nama,
+      angle: primaryAngle.teknik,
+      fmt: "Static",
+      framework: "PAS",
+      copy,
+      is_used: true,
+      time: "15 Mar 2026, 10.18",
+    },
+    {
+      id: "demo-copy-2",
+      audience: audiences[1].nama,
+      angle: angleMap[audiences[1].id][1].teknik,
+      fmt: "Carousel",
+      framework: "PAS",
+      copy: angleMap[audiences[1].id][1].demoCopy,
+      is_used: false,
+      time: "15 Mar 2026, 09.42",
+    },
+  ];
+
+  return {
+    user: {
+      id: "demo-user",
+      username: "demo",
+      display_name: "Demo Workspace",
+      is_admin: false,
+    },
+    project: {
+      id: "demo-project",
+      name: "TemanLaunch Sprint Demo",
+      analysis: page.generatedAnalysis,
+      settings: null,
+      updated_at: "2026-03-15T03:20:00.000Z",
+    },
+    surfaceMode: "wizard",
+    advancedMode: false,
+    tab: "copy",
+    wizardSourceMode: "brief",
+    wizardUrl: "https://temanlaunch.my.id/demo",
+    wizardBrief: brief,
+    wizardProgress: {
+      phase: "output",
+      sourceMode: "brief",
+      startedAt: Date.now() - 240000,
+      completedAt: Date.now() - 120000,
+      steps: {
+        analysis: "done",
+        audience: "done",
+        angle: "done",
+        copy: "done",
+      },
+    },
+    settings: {
+      framework: "PAS",
+      slangLevel: 3,
+      beginnerGoal: "service_offer",
+      brandVoice: "tajam, suportif, founder-friendly",
+      forbiddenWords: "paling murah, instan kaya",
+      requiredWords: "rapi, launch, desktop",
+      customInstructions: "Jaga copy tetap natural untuk audience bisnis kecil Indonesia.",
+      language: "informal",
+      ...createDefaultAiSettings(),
+    },
+    landingBrief: brief,
+    landingPage: page,
+    analysis: {
+      ...page.generatedAnalysis,
+      tagline: "Satu desktop workspace untuk menyiapkan launch pack awal tanpa chaos.",
+      social_proof: "Dipakai sebagai demo launch workflow desktop-first untuk founder, operator, dan creator.",
+    },
+    audiences,
+    selAud: primaryAudience,
+    angles: primaryAngles,
+    anglesCache: Object.fromEntries(
+      audiences.map((audience, index) => [index, angleMap[audience.id] || []]),
+    ),
+    selAng: primaryAngle,
+    copy,
+    fmt: "Static",
+    history,
+    usageSummary: {
+      wallet: {
+        balanceCredits: 128,
+        grantedCredits: 200,
+        lifetimeUsedCredits: 72,
+        enforceCredits: false,
+      },
+      summary: {
+        monthCreditsUsed: 24,
+        monthCalls: 6,
+        monthTotalTokens: 28200,
+        monthInternalCalls: 6,
+        monthByokCalls: 0,
+        monthEstimatedCostUsd: 1.48,
+        lifetimeCreditsUsed: 72,
+        lifetimeCalls: 18,
+        lifetimeTotalTokens: 90400,
+        lifetimeInternalCalls: 18,
+        lifetimeByokCalls: 0,
+        lifetimeEstimatedCostUsd: 4.86,
+        totalRuns: 4,
+        runCreditsUsed: 54,
+      },
+      pricing: {
+        analyze_lp: 6,
+        generate_audience: 8,
+        generate_angle: 8,
+        generate_copy: 10,
+        generate_landing_page: 12,
+        generic_chat: 4,
+      },
+      topTasks: [
+        { task_type: "generate_copy", credits_used: 20, calls: 2, total_tokens: 23800 },
+        { task_type: "generate_angle", credits_used: 16, calls: 2, total_tokens: 18200 },
+        { task_type: "generate_audience", credits_used: 8, calls: 1, total_tokens: 9200 },
+      ],
+    },
+    usageEvents: [
+      {
+        id: "demo-event-1",
+        request_label: "Wizard Generate Copy",
+        task_type: "generate_copy",
+        project_name: "TemanLaunch Sprint Demo",
+        model_id: "claude-3-7-sonnet",
+        created_at: "2026-03-15T03:18:00.000Z",
+        credits_charged: 10,
+        total_tokens: 12400,
+        billing_source: "internal",
+        status: "success",
+      },
+      {
+        id: "demo-event-2",
+        request_label: "Generate Angle",
+        task_type: "generate_angle",
+        project_name: "TemanLaunch Sprint Demo",
+        model_id: "claude-3-7-sonnet",
+        created_at: "2026-03-15T03:15:00.000Z",
+        credits_charged: 8,
+        total_tokens: 9100,
+        billing_source: "internal",
+        status: "success",
+      },
+    ],
+    usageRuns: [
+      {
+        id: "demo-run-1",
+        label: "Campaign cycle · TemanLaunch Sprint",
+        run_type: "campaign_cycle",
+        project_name: "TemanLaunch Sprint Demo",
+        started_at: "2026-03-15T03:12:00.000Z",
+        status: "completed",
+        credits_charged: 28,
+        total_tokens: 30700,
+        estimated_cost_usd: 1.73,
+      },
+    ],
+    usageLedger: [
+      {
+        id: "demo-ledger-1",
+        reason: "Starter credit demo",
+        entry_type: "grant",
+        billing_source: "manual",
+        project_name: "TemanLaunch Sprint Demo",
+        request_label: "Manual grant",
+        task_type: "manual",
+        provider: "manual",
+        model_id: null,
+        created_at: "2026-03-15T03:00:00.000Z",
+        amount: 200,
+        total_tokens: 0,
+        balance_after: 200,
+      },
+      {
+        id: "demo-ledger-2",
+        reason: "Campaign cycle debit",
+        entry_type: "debit",
+        billing_source: "internal",
+        project_name: "TemanLaunch Sprint Demo",
+        request_label: "Campaign cycle",
+        task_type: "generate_copy",
+        provider: "Anthropic",
+        model_id: "claude-3-7-sonnet",
+        created_at: "2026-03-15T03:18:00.000Z",
+        amount: -72,
+        total_tokens: 90400,
+        balance_after: 128,
+      },
+    ],
+  };
+}

@@ -71,6 +71,7 @@ export default function WizardFlow({
   audiences = [],
   angles = [],
   copy = "",
+  isDemoMode = false,
   onOpenStudio,
   onOpenAdvancedStudio,
   onOpenTab,
@@ -96,24 +97,31 @@ export default function WizardFlow({
       <div style={{ position: "relative", overflow: "hidden", borderRadius: 34, border: `1px solid ${panel.border}`, background: "linear-gradient(135deg, #fcf6ea 0%, #f1e0bf 48%, #ead7b1 100%)", padding: "clamp(22px,4vw,34px)", boxShadow: "0 24px 70px #5c412110" }}>
         <div style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "radial-gradient(circle at top right, rgba(255,255,255,.55), transparent 28%), radial-gradient(circle at 12% 18%, rgba(31,107,74,.10), transparent 26%)" }} />
         <div style={{ position: "relative", display: "grid", gap: 22 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1.12fr) minmax(260px,.88fr)", gap: 18, alignItems: "end" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1.18fr) minmax(300px,.82fr)", gap: 20, alignItems: "end" }}>
             <div>
               <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 2.2, fontWeight: 900, color: panel.accent, marginBottom: 10 }}>
-                Angle 2 Wizard
+                TemanLaunch Flow
               </div>
-              <div style={{ fontFamily: "'Fraunces', 'Georgia', serif", fontSize: "clamp(2.2rem,5vw,4.6rem)", lineHeight: 0.93, letterSpacing: -1.5, color: panel.text, maxWidth: "10.5ch", marginBottom: 12 }}>
-                Masuk dari link atau brief, lalu keluar dengan bahan campaign awal.
+              <div style={{ fontFamily: "'Fraunces', 'Georgia', serif", fontSize: "clamp(2.6rem,4.8vw,4.8rem)", lineHeight: 0.92, letterSpacing: -1.5, color: panel.text, maxWidth: "11.5ch", marginBottom: 12 }}>
+                Susun launch pack awal tanpa pindah-pindah konteks campaign.
               </div>
               <div style={{ maxWidth: 620, fontSize: 14, lineHeight: 1.85, color: panel.muted }}>
-                Wizard ini membungkus flow yang sudah ada menjadi urutan yang lebih tenang: pilih bahan, jalankan AI, review hasil awal, lalu masuk ke editor sederhana. Studio penuh tetap ada kalau kamu ingin menyunting lebih detail.
+                Flow ini merangkum tiga langkah yang paling penting untuk demo desktop: pilih bahan, bentuk launch pack awal, lalu teruskan ke editor yang lebih detail saat kamu memang perlu menyunting.
+              </div>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 14 }}>
+                <span style={{ background: "#fff6ebc9", color: panel.accent, border: `1px solid ${panel.accent}26`, borderRadius: 999, padding: "7px 12px", fontSize: 11, fontWeight: 800 }}>Desktop-first workspace</span>
+                <span style={{ background: "#fff6ebc9", color: panel.orange, border: `1px solid ${panel.orange}26`, borderRadius: 999, padding: "7px 12px", fontSize: 11, fontWeight: 800 }}>Audience + angle + copy + landing</span>
+                {isDemoMode && <span style={{ background: "#fff6ebc9", color: panel.orange, border: `1px solid ${panel.orange}26`, borderRadius: 999, padding: "7px 12px", fontSize: 11, fontWeight: 800 }}>Sample pack aman untuk presentasi</span>}
               </div>
             </div>
             <div style={{ justifySelf: "stretch", display: "grid", gap: 12 }}>
-              <div style={{ borderRadius: 24, border: `1px solid ${panel.border}`, background: "#fff9f1cc", padding: "16px 16px 14px" }}>
-                <div style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: 1.7, fontWeight: 800, color: panel.dim, marginBottom: 6 }}>{project ? "Project aktif" : "Sesi saat ini"}</div>
-                <div style={{ fontSize: 14, fontWeight: 800, color: panel.text }}>{project?.name || "Session lokal"}</div>
+              <div style={{ borderRadius: 24, border: `1px solid ${panel.border}`, background: "#fff9f1cc", padding: "18px 17px 15px", boxShadow: "0 18px 34px #5c41210e" }}>
+                <div style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: 1.7, fontWeight: 800, color: panel.dim, marginBottom: 6 }}>{isDemoMode ? "Demo aktif" : project ? "Project aktif" : "Sesi saat ini"}</div>
+                <div style={{ fontSize: 15, fontWeight: 800, color: panel.text }}>{isDemoMode ? "Sample launch workspace" : project?.name || "Session lokal"}</div>
                 <div style={{ fontSize: 11, color: panel.muted, lineHeight: 1.65, marginTop: 6 }}>
-                  {project
+                  {isDemoMode
+                    ? "Semua hasil di layar ini adalah contoh preset yang aman dibuka saat presentasi. Untuk flow live, cukup masuk dengan akun yang tersambung backend."
+                    : project
                     ? "Semua hasil wizard berikutnya akan langsung masuk ke project ini, jadi konteks campaign tetap rapih."
                     : "Semua hasil wizard tetap bisa jalan tanpa project, tapi akan lebih rapi kalau nanti kamu menyimpannya ke project aktif."}
                 </div>
@@ -134,9 +142,9 @@ export default function WizardFlow({
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 14 }}>
-            <SummaryCard label="Jalur cepat" value="URL landing page" detail="Tempel link produk, wizard akan scrape lalu meringkasnya jadi bahan audience pertama." tone={panel.accent} />
-            <SummaryCard label="Jalur tanpa LP" value="Template brief" detail="Isi bahan produk manual untuk mulai dari offer inti, target market, dan pembeda." tone={panel.orange} />
-            <SummaryCard label="Output awal" value="Target pembeli, ide jualan, dan copy pertama" detail="Wizard menyusun hasil awal supaya kamu tidak harus lompat ke banyak tab dulu." tone={panel.cyan} />
+            <SummaryCard label="Jalur cepat" value="Mulai dari landing page" detail="Tempel link produk, lalu flow akan menyiapkan ringkasan dan jalur audience pertama." tone={panel.accent} />
+            <SummaryCard label="Jalur manual" value="Isi brief, bukan dokumen panjang" detail="Masukkan offer inti, target market, dan CTA tanpa perlu menyiapkan brief terpisah." tone={panel.orange} />
+            <SummaryCard label="Output utama" value="Launch pack yang enak dibuka di desktop" detail="Audience, angle, copy, dan landing page awal disusun supaya presentasi terasa lebih matang." tone={panel.cyan} />
           </div>
         </div>
       </div>
@@ -149,10 +157,10 @@ export default function WizardFlow({
                 Step 1
               </div>
               <div style={{ fontFamily: "'Fraunces', 'Georgia', serif", fontSize: 32, lineHeight: 0.98, letterSpacing: -0.9, color: panel.text, marginBottom: 8 }}>
-                Pilih goal dan bahan campaign pertama.
+                Pilih arah launch dan bahan campaign pertama.
               </div>
               <div style={{ fontSize: 13, lineHeight: 1.8, color: panel.muted }}>
-                Tentukan dulu tipe jualannya supaya wizard otomatis memilih arah kerja paling masuk akal. Setelah itu baru masuk dari link produk atau brief manual.
+                Tentukan dulu tipe jualannya supaya flow otomatis memilih framework, format, dan nada kerja yang paling masuk akal. Setelah itu baru masuk dari link produk atau brief manual.
               </div>
             </div>
 
@@ -233,7 +241,7 @@ export default function WizardFlow({
                     style={{ width: "100%", background: "#fffdf7", border: `1px solid ${panel.border}`, borderRadius: 18, padding: "14px 16px", color: panel.text, fontSize: 14 }}
                   />
                   <div style={{ fontSize: 11, lineHeight: 1.7, color: panel.dim }}>
-                    Wizard akan membaca isi halaman, menyusun analysis, lalu langsung membangun audience pertama.
+                    Flow akan membaca halaman, merapikan analysis, lalu langsung membangun audience pertama.
                   </div>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: 14, alignItems: "center", flexWrap: "wrap" }}>
@@ -271,7 +279,7 @@ export default function WizardFlow({
               Step 2
             </div>
             <div style={{ fontFamily: "'Fraunces', 'Georgia', serif", fontSize: 28, lineHeight: 0.98, letterSpacing: -0.8, color: panel.text, marginBottom: 12 }}>
-              Pantau proses AI tanpa perlu pindah menu.
+              Lihat progress build tanpa keluar dari meja kerja.
             </div>
             <div style={{ display: "grid", gap: 10 }}>
               <ProcessRow title="Siapkan bahan" detail={sourceMode === "url" ? "Scrape dan ringkas landing page." : "Susun brief jadi analysis campaign."} status={stepMap.analysis || "idle"} />
@@ -286,12 +294,12 @@ export default function WizardFlow({
               Step 3
             </div>
             <div style={{ fontFamily: "'Fraunces', 'Georgia', serif", fontSize: 28, lineHeight: 0.98, letterSpacing: -0.8, color: panel.text, marginBottom: 12 }}>
-              Review hasil awal lalu lanjut ke editor.
+              Review hasil awal, lalu masuk ke editor saat dibutuhkan.
             </div>
 
             {!hasOutput ? (
               <div style={{ borderRadius: 22, border: `1px dashed ${panel.border}`, padding: "20px 18px", fontSize: 12, lineHeight: 1.8, color: panel.muted }}>
-                Hasil wizard akan muncul di sini setelah proses berjalan. Begitu selesai, kamu langsung bisa lompat ke bagian yang relevan tanpa harus menata ulang konteks campaign dari awal.
+                Launch pack akan muncul di sini setelah proses berjalan. Begitu selesai, kamu bisa lompat ke bagian yang relevan tanpa harus menata ulang konteks campaign dari awal.
               </div>
             ) : (
               <CampaignPack

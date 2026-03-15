@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export function LoginModal({ onAuth, onDevLogin, devLoginEnabled = false, devLoginBusy = false, ui }) {
+export function LoginModal({ onAuth, onEnterDemo, onDevLogin, devLoginEnabled = false, devLoginBusy = false, ui }) {
   const { API_BASE, Btn, C, FONT_DISPLAY, Pill } = ui;
   const [mode, setMode] = useState("login");
   const [username, setUsername] = useState("");
@@ -38,18 +38,18 @@ export function LoginModal({ onAuth, onDevLogin, devLoginEnabled = false, devLog
       <div className="auth-panel">
         <div className="auth-brand">
           <div style={{ position: "relative", zIndex: 1 }}>
-            <Pill ch="Campaign Atelier" color="#f0d8a2" />
+            <Pill ch="Desktop Launch Desk" color="#f0d8a2" />
             <div style={{ fontFamily: FONT_DISPLAY, fontSize: 44, lineHeight: 0.92, letterSpacing: -1.2, margin: "18px 0 12px" }}>
-              Meta Ads Builder
+              TemanLaunch
             </div>
             <div style={{ fontSize: 13, lineHeight: 1.85, color: "#e3d7c6", maxWidth: 300 }}>
-              Studio kerja untuk membentuk landing page, audience, angle, dan ad copy dalam satu workflow yang rapi.
+              Workspace desktop untuk menyusun audience, angle, copy, dan landing page awal dalam satu flow yang terasa rapi saat dipresentasikan.
             </div>
             <div style={{ marginTop: 22, display: "grid", gap: 12 }}>
               {[
-                ["Landing Page", "Generate halaman jualan dari brief dan framework aktif."],
-                ["Audience Mapping", "Turunkan offer jadi segment yang bisa langsung dieksekusi."],
-                ["Copy Library", "Simpan, tandai, dan pakai ulang copy yang benar-benar dipakai."],
+                ["Launch Pack", "Lihat ringkasan produk, target pembeli, angle, copy, dan halaman awal dalam satu meja kerja."],
+                ["Desktop Workflow", "Disusun untuk dipakai founder, operator, dan marketer di layar laptop atau desktop."],
+                ["Safe Demo Mode", "Masuk ke sample workspace kapan pun kalau backend atau AI sedang tidak stabil."],
               ].map(([title, text]) => (
                 <div key={title} style={{ padding: "14px 0", borderTop: "1px solid #ffffff1b" }}>
                   <div style={{ fontSize: 12, fontWeight: 800, color: "#f7efe3", marginBottom: 4 }}>{title}</div>
@@ -66,10 +66,10 @@ export function LoginModal({ onAuth, onDevLogin, devLoginEnabled = false, devLog
               {mode === "login" ? "Masuk ke workspace" : "Buat workspace baru"}
             </div>
             <div style={{ fontFamily: FONT_DISPLAY, fontSize: 34, lineHeight: 0.98, letterSpacing: -0.8, color: C.text, marginBottom: 8 }}>
-              {mode === "login" ? "Kembali ke meja kerja kamu." : "Mulai dari akun baru."}
+              {mode === "login" ? "Masuk ke launch desk kamu." : "Mulai workspace baru."}
             </div>
             <div style={{ fontSize: 13, color: C.muted, lineHeight: 1.8 }}>
-              {mode === "login" ? "Pilih project terakhir dan lanjutkan produksi campaign tanpa setup ulang." : "Daftar sekali, lalu semua project dan eksperimen kamu akan tersimpan."}
+              {mode === "login" ? "Masuk dengan akun real untuk lanjutkan project, atau buka demo workspace kalau kamu butuh jalur presentasi yang aman." : "Daftar sekali, lalu semua project dan eksperimen launch kamu akan tersimpan."}
             </div>
           </div>
 
@@ -84,6 +84,24 @@ export function LoginModal({ onAuth, onDevLogin, devLoginEnabled = false, devLog
             onKeyDown={(event) => event.key === "Enter" && submit()}
             style={{ width: "100%", background: C.s1, border: `1px solid ${C.border}`, borderRadius: 16, padding: "13px 16px", color: C.text, fontSize: 13, marginBottom: 18 }} />
           <Btn ch={busy ? "Loading..." : mode === "login" ? "Masuk" : "Daftar"} onClick={submit} loading={busy} full size="lg" />
+          <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "14px 0 10px" }}>
+            <div style={{ flex: 1, height: 1, background: `${C.border}` }} />
+            <div style={{ fontSize: 10, letterSpacing: 1.6, textTransform: "uppercase", fontWeight: 800, color: C.dim }}>Jalur aman presentasi</div>
+            <div style={{ flex: 1, height: 1, background: `${C.border}` }} />
+          </div>
+          <Btn
+            ch="Buka Demo Workspace"
+            onClick={() => {
+              setErr("");
+              onEnterDemo?.();
+            }}
+            full
+            size="lg"
+            v="s"
+          />
+          <div style={{ fontSize: 11, color: C.dim, lineHeight: 1.7, marginTop: 8 }}>
+            Demo mode membuka sample project yang sudah terisi, jadi flow tetap enak dibuka walau auth, DB, atau AI sedang bermasalah.
+          </div>
           {devLoginEnabled && (
             <>
               <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "14px 0 10px" }}>

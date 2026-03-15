@@ -104,12 +104,12 @@ export default function StudioDashboard({
     <>
       <div className="shell-hero">
         <div>
-          <Badge ch={advancedMode ? "Campaign Atelier" : "Studio Sederhana"} color={C.accent} />
-          <div className="hero-title">{advancedMode ? "Bikin funnel, angle, dan copy dari satu meja kerja." : "Rapikan hasil wizard tanpa tenggelam di istilah teknis."}</div>
+          <Badge ch={advancedMode ? "TemanLaunch Pro" : "Launch Desk"} color={C.accent} />
+          <div className="hero-title">{advancedMode ? "Bangun funnel, angle, dan copy dari satu launch desk." : "Rapikan hasil flow tanpa tenggelam di panel yang tidak perlu."}</div>
           <div className="hero-copy">
             {advancedMode
               ? "Mode lanjutan ini memberi kontrol penuh: mulai dari framework, bentuk halaman jualan, baca produk, lalu turunkan ke target pembeli, ide jualan, dan teks iklan tanpa pindah konteks."
-              : "Mode ini menyisakan hal-hal yang paling penting dulu: ringkasan produk, target pembeli, ide jualan, teks iklan, dan halaman jualan. Pengaturan teknis dipindah ke mode lanjutan supaya alurnya tetap ringan."}
+              : "Mode ini menyisakan bagian yang paling penting lebih dulu: ringkasan produk, target pembeli, ide jualan, teks iklan, dan halaman jualan. Pengaturan teknis dipindah ke mode lanjutan supaya desk review tetap ringan."}
           </div>
           <div className="hero-actions">
             {heroBadges.map((item) => (

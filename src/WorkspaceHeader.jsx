@@ -18,6 +18,7 @@ export default function WorkspaceHeader({
   history,
   usageSummary,
   user,
+  isDemoMode,
   onOpenProjects,
   onSaveProject,
   onLogout,
@@ -25,9 +26,11 @@ export default function WorkspaceHeader({
   const Button = Btn;
   const Badge = Pill;
   const contextLine = surfaceMode === "wizard"
-    ? "Masuk dari produk, keluar dengan bahan jualan awal."
+    ? isDemoMode
+      ? "Sample launch desk yang aman dipakai untuk demo desktop."
+      : "Masuk dari brief atau link, keluar dengan launch pack awal."
     : advancedMode
-      ? `${stageFramework?.label || "Studio"} · ${SLANG_LEVELS.find((item) => item.val === settings.slangLevel)?.label || "Bahasa aktif"} · Studio lanjutan`
+      ? `${stageFramework?.label || "Studio"} · ${SLANG_LEVELS.find((item) => item.val === settings.slangLevel)?.label || "Bahasa aktif"} · Launch desk lanjutan`
       : `Editor ringkas untuk ${stageGoalPreset?.shortLabel || "campaign"} yang sedang kamu rapikan.`;
   const primaryLabel = surfaceMode === "wizard" ? "Buka Editor Ringkas" : "Kembali ke Wizard";
   const modeToggle = surfaceMode === "wizard"
@@ -50,10 +53,11 @@ export default function WorkspaceHeader({
             <div style={{ background: `linear-gradient(135deg,${C.accent},${C.mid})`, width: 40, height: 40, borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 12px 26px #1f6b4a20" }}>{Ic.rocket({ size: 18, color: "#fffaf2" })}</div>
             <div style={{ display: "grid", gap: 4 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                <div style={{ fontWeight: 900, fontSize: 16, letterSpacing: -0.4 }}>Meta Ads Builder</div>
+                <div style={{ fontWeight: 900, fontSize: 16, letterSpacing: -0.4 }}>TemanLaunch</div>
                 <span style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: 1.8, color: C.dim, fontWeight: 800 }}>
-                  {surfaceMode === "wizard" ? "Wizard utama" : advancedMode ? "Studio lanjutan" : "Studio ringkas"}
+                  {surfaceMode === "wizard" ? "Launch Flow" : advancedMode ? "Launch Desk Pro" : "Launch Desk"}
                 </span>
+                {isDemoMode && <Badge ch="Demo Mode" color={C.orange} sm />}
               </div>
               <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.6 }}>
                 {contextLine}
@@ -68,7 +72,7 @@ export default function WorkspaceHeader({
                 {user?.is_admin && <Badge ch={<><span style={{ display: "inline-flex" }}>{Ic.shield({ size: 10, color: C.red })}</span> admin</>} color={C.red} sm />}
               </div>
             </div>
-            <Button ch={<><span style={{ display: "inline-flex" }}>{Ic.logOut({ size: 12 })}</span> Logout</>} onClick={onLogout} v="g" size="sm" />
+            <Button ch={<><span style={{ display: "inline-flex" }}>{Ic.logOut({ size: 12 })}</span> {isDemoMode ? "Keluar Demo" : "Logout"}</>} onClick={onLogout} v="g" size="sm" />
           </div>
         </div>
 
@@ -76,6 +80,7 @@ export default function WorkspaceHeader({
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             {project && <Badge ch={<><span style={{ display: "inline-flex" }}>{Ic.folder({ size: 10, color: C.accent })}</span> {project.name}</>} color={C.accent} />}
             {!project && surfaceMode === "wizard" && <Badge ch="Sesi masih sementara" color={C.orange} />}
+            {isDemoMode && <Badge ch="Sample launch pack preset" color={C.orange} />}
             {analysis?.produk && <Badge ch={analysis.produk} color={C.cyan} />}
             {history.length > 0 && <Badge ch={<><span style={{ display: "inline-flex", marginRight: 3 }}>{Ic.bookOpen({ size: 10, color: C.cyan })}</span> {history.length} draft</>} color={C.cyan} />}
             {showCredits && <Badge ch={`Sisa kredit: ${usageSummary.wallet.balanceCredits} cr`} color={usageSummary.wallet.balanceCredits > 0 ? C.accent : C.orange} />}
@@ -83,8 +88,8 @@ export default function WorkspaceHeader({
           <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", justifyContent: "flex-end" }}>
             <Button ch={primaryLabel} onClick={onToggleSurface} size="sm" />
             <Button ch={modeToggle.label} onClick={modeToggle.onClick} v="g" size="sm" />
-            <Button ch={<><span style={{ display: "inline-flex" }}>{Ic.folder({ size: 13 })}</span> {projectButtonLabel}</>} onClick={onOpenProjects} v="s" size="sm" />
-            {project && <Button ch={<><span style={{ display: "inline-flex" }}>{Ic.save({ size: 13 })}</span> Simpan</>} onClick={onSaveProject} v="s" size="sm" />}
+            {!isDemoMode && <Button ch={<><span style={{ display: "inline-flex" }}>{Ic.folder({ size: 13 })}</span> {projectButtonLabel}</>} onClick={onOpenProjects} v="s" size="sm" />}
+            {!isDemoMode && project && <Button ch={<><span style={{ display: "inline-flex" }}>{Ic.save({ size: 13 })}</span> Simpan</>} onClick={onSaveProject} v="s" size="sm" />}
           </div>
         </div>
       </div>
